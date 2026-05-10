@@ -1,0 +1,5 @@
+CREATE TABLE risk (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    severity VARCHAR(255)
+);
