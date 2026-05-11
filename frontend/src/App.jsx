@@ -24,14 +24,21 @@ function App() {
 
   const addRisk = () => {
 
+    if (!title || !severity) {
+      alert("Please fill all fields")
+      return
+    }
+
     const newRisk = {
       title,
       severity
     }
 
     api.post("/risks", newRisk)
-      .then(() => {
-        fetchRisks()
+      .then((res) => {
+
+        setRisks([...risks, res.data])
+
         setTitle("")
         setSeverity("")
       })
@@ -41,9 +48,12 @@ function App() {
   }
 
   const deleteRisk = (id) => {
+
     api.delete(`/risks/${id}`)
       .then(() => {
-        fetchRisks()
+
+        setRisks(risks.filter(risk => risk.id !== id))
+
       })
       .catch((err) => {
         console.log(err)
@@ -134,7 +144,7 @@ function App() {
           placeholder="Search Risk..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="p-3 w-full rounded-xl mb-6 text-black"
+          className="p-3 w-full rounded-xl mb-6 bg-white text-black placeholder-gray-500 border border-gray-300 shadow"
         />
 
         {/* Risk List */}
@@ -160,7 +170,7 @@ function App() {
 
                   <span
                     className={`inline-block mt-2 px-3 py-1 rounded-full text-white text-sm
-                      ${risk.severity === "High"
+                    ${risk.severity === "High"
                         ? "bg-red-500"
                         : risk.severity === "Medium"
                           ? "bg-yellow-500"
